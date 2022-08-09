@@ -1,11 +1,15 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, track } from 'lwc';
 
 export default class ToDoList extends LightningElement {
-    time= "8:15 PM";
-    greeting = "Good Evening";
+    @track time= "8:15 PM";
+    @track greeting = "Good Evening";
+    @track todos= [];
 
     connectedCallback() {
        this.getTime(); 
+       setInterval (() => {
+        this.getTime();
+       }, 1000 *60);
     }
     getTime() {
         const date= new Date();
@@ -34,6 +38,20 @@ getDoubleDigit(digit) {
         } else {
             this.greeting= 'Good Evening';
         }
+    }
+
+    addToDoHandler() {
+        const inputBox= this.template.querySelector("lightning-input");
+        //console.log('Current value', inputBox.value);
+        const todo={
+            todoId: this.todos.length,
+            todoName: inputBox.value,
+            done: false,
+            todoDate: new Date()
+
+        }
+        this.todos.push(todo);
+        inputBox.value="";
     }
 
 }
